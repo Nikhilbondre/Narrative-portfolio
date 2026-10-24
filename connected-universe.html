@@ -2,86 +2,146 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="A connected universe of animated crime feature films by Nikhil Bondre.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Explore a connected animated crime saga planned across 4–5 feature films by Nikhil Bondre.">
 <meta name="theme-color" content="#080a10">
 <title>The Universe — Nikhil Bondre</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-.universe-intro{position:relative;isolation:isolate;min-height:330px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;border-bottom:1px solid var(--line);padding:60px 0 54px}
-.universe-intro:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 78% 45%,rgba(98,88,255,.16),transparent 38%),linear-gradient(105deg,transparent 42%,rgba(185,252,59,.06) 42.2%,transparent 43%),repeating-linear-gradient(0deg,transparent 0 49px,rgba(255,255,255,.025) 50px 51px);animation:universe-atmosphere 2.4s ease-out both}
-.universe-intro:after{content:"A CONNECTED CRIME SAGA";position:absolute;right:0;bottom:22px;color:var(--soft);font:9px var(--mono);letter-spacing:.14em;opacity:0;animation:universe-fade .8s 1.1s ease-out forwards}
-.universe-kicker{opacity:0;animation:universe-fade .6s .3s ease-out forwards}
-.universe-title{font:900 clamp(64px,10.5vw,132px)/.82 var(--display);letter-spacing:-.025em;text-transform:uppercase;margin:23px 0 18px;max-width:1000px;opacity:0;transform:translateY(15px);animation:universe-title-in .9s .5s cubic-bezier(.2,.75,.2,1) forwards}
+.universe-transition{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;overflow:hidden;background:#080910;color:#f0eee8;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .34s ease,visibility .34s ease;isolation:isolate;padding:24px}
+body.universe-booting .universe-transition{opacity:1;visibility:visible;pointer-events:auto}
+body.universe-skip-intro .universe-transition{display:none!important}
+.universe-transition:before,.universe-transition:after{content:"";position:absolute;inset:-20%;pointer-events:none}
+.universe-transition:before{background:radial-gradient(circle at 50% 48%,rgba(134,90,211,.2),transparent 25%),radial-gradient(circle at 50% 48%,rgba(185,252,59,.08),transparent 48%);animation:universe-portal-bloom 1.9s cubic-bezier(.16,.75,.18,1) both}
+.universe-transition:after{inset:50% auto auto -15%;width:130%;height:1px;background:linear-gradient(90deg,transparent,#b9fc3b 35%,#b9fc3b 65%,transparent);box-shadow:0 0 20px rgba(185,252,59,.55);transform:rotate(-18deg);transform-origin:center;animation:universe-signal-sweep 1.65s .08s ease-in-out both}
+.universe-transition-core{position:relative;z-index:1;width:min(440px,100%);text-align:center;animation:universe-core-in 1.35s cubic-bezier(.2,.8,.2,1) both}
+.universe-transition-code{display:block;color:#b9fc3b;font:10px var(--mono);letter-spacing:.2em;margin-bottom:24px;animation:universe-code-flicker 1.4s ease both}
+.universe-portal{width:min(44vw,190px);min-width:126px;aspect-ratio:1;border:1px solid rgba(185,252,59,.45);border-radius:50%;margin:0 auto 26px;position:relative;display:grid;place-items:center;box-shadow:0 0 0 14px rgba(185,252,59,.035),0 0 0 30px rgba(122,86,191,.045),inset 0 0 28px rgba(185,252,59,.06);animation:universe-portal-turn 1.65s cubic-bezier(.2,.75,.2,1) both}
+.universe-portal:before,.universe-portal:after{content:"";position:absolute;inset:15%;border:1px solid rgba(174,133,225,.58);transform:rotate(35deg);animation:universe-portal-turn 1.65s ease-in-out both}
+.universe-portal:after{inset:29%;border-color:rgba(185,252,59,.75);transform:rotate(-25deg)}
+.universe-portal span{font:900 clamp(30px,8vw,47px)/1 var(--display);letter-spacing:-.06em;color:#f4f0e8;text-shadow:0 0 22px rgba(185,252,59,.18)}
+.universe-transition-title{font:800 clamp(22px,5vw,34px)/1.1 var(--display);letter-spacing:.04em;text-transform:uppercase;margin:0}
+.universe-transition-subtitle{color:#9697a4;font:9px var(--mono);letter-spacing:.13em;margin:12px 0 0}
+.universe-motifs{display:flex;flex-wrap:wrap;justify-content:center;gap:7px 13px;max-width:440px;margin:21px auto 15px;font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase}
+.universe-motifs span{color:#a9aebe;opacity:.56;animation:universe-motif-glint 1.42s ease-out both}
+.universe-motifs span:nth-child(1){animation-delay:0s}.universe-motifs span:nth-child(2){animation-delay:.15s}.universe-motifs span:nth-child(3){animation-delay:.3s}.universe-motifs span:nth-child(4){animation-delay:.45s}.universe-motifs span:nth-child(5){animation-delay:.6s}.universe-motifs span:nth-child(6){animation-delay:.75s}
+@keyframes universe-motif-glint{0%{opacity:.15;color:#676e7f;text-shadow:none}18%,44%{opacity:1;color:#b9fc3b;text-shadow:0 0 13px rgba(185,252,59,.36)}100%{opacity:.58;color:#c3c6d0;text-shadow:none}}
+.universe-transition.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+body.universe-booting .topline,body.universe-booting .nav,body.universe-booting main,body.universe-booting footer{opacity:0;visibility:hidden}
+body.universe-ready .topline,body.universe-ready .nav,body.universe-ready main,body.universe-ready footer{animation:universe-content-arrive .65s cubic-bezier(.2,.75,.2,1) both}
+.universe-intro{position:relative;isolation:isolate;min-height:340px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;border-bottom:1px solid var(--line);padding:60px 0 54px}
+.universe-intro:before{content:"";position:absolute;z-index:-1;inset:0;background:radial-gradient(ellipse at 78% 45%,rgba(98,88,255,.16),transparent 38%),linear-gradient(105deg,transparent 42%,rgba(185,252,59,.06) 42.2%,transparent 43%),repeating-linear-gradient(0deg,transparent 0 49px,rgba(255,255,255,.025) 50px 51px);animation:universe-atmosphere 1.5s ease-out both}
+.universe-intro:after{content:"A CONNECTED CRIME SAGA";position:absolute;right:0;bottom:22px;color:var(--soft);font:9px var(--mono);letter-spacing:.14em;opacity:0;animation:universe-fade .55s .32s ease-out forwards}
+.universe-kicker{opacity:0;animation:universe-fade .5s .12s ease-out forwards}
+.universe-title{font:900 clamp(58px,10.5vw,132px)/.84 var(--display);letter-spacing:-.025em;text-transform:uppercase;margin:23px 0 18px;max-width:1000px;opacity:0;transform:translateY(13px);animation:universe-title-in .62s .14s cubic-bezier(.2,.75,.2,1) forwards}
 .universe-title span{color:var(--accent)}
-.universe-intro p{max-width:620px;color:var(--muted);font-size:15px;line-height:1.8;margin:0;opacity:0;animation:universe-fade .8s 1s ease-out forwards}
+.universe-intro p{max-width:620px;color:var(--muted);font-size:15px;line-height:1.8;margin:0;opacity:0;animation:universe-fade .55s .26s ease-out forwards}
 .film-section{padding-top:56px}
-.film-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0 64px}
-.film-card{min-width:0;display:flex;flex-direction:column;border:1px solid var(--line);background:#10131b;overflow:hidden;opacity:0;transform:translateY(14px);animation:universe-card-in .7s ease-out forwards}
-.film-card:nth-child(1){animation-delay:1s}.film-card:nth-child(2){animation-delay:1.18s}.film-card:nth-child(3){animation-delay:1.36s}
-.film-art{height:235px;position:relative;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:18px;overflow:hidden;border-bottom:1px solid var(--line)}
-.film-art:before{content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.18);transform:skewY(-8deg);pointer-events:none}
-.film-art:after{content:"";position:absolute;width:160%;height:1px;left:-28%;top:48%;transform:rotate(-24deg);pointer-events:none}
-.film-art>*{position:relative;z-index:1}
-.film-number{font:9px var(--mono);letter-spacing:.14em;color:rgba(255,255,255,.68)}
-.film-art h2{font:900 clamp(30px,4vw,48px)/.88 var(--display);letter-spacing:-.01em;text-transform:uppercase;margin:0;max-width:100%;overflow-wrap:anywhere}
-.film-art.thief{background:radial-gradient(ellipse at 70% 28%,rgba(167,127,75,.28),transparent 40%),linear-gradient(145deg,#1d1a22,#080a10)}
-.film-art.thief:after{background:#d9b675;box-shadow:0 0 22px rgba(217,182,117,.48)}
-.film-art.saimon{background:radial-gradient(ellipse at 70% 24%,rgba(185,252,59,.12),transparent 38%),linear-gradient(145deg,#151e1b,#080a10)}
-.film-art.saimon:after{background:#b9fc3b;box-shadow:0 0 22px rgba(185,252,59,.42)}
-.film-art.tba{background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.04),transparent 45%),#0b0e15}
-.film-art.tba:after{background:rgba(255,255,255,.18)}
-.film-copy{display:flex;flex-direction:column;flex:1;padding:21px}
-.film-meta{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-.film-copy h3{font:700 28px/1 var(--display);margin:0 0 10px}
-.film-copy p{font-size:13px;line-height:1.75;color:var(--muted);margin:0 0 21px}
-.film-action{display:inline-flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:14px;border-top:1px solid var(--line);font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-.film-action:hover{color:var(--accent)}
-.tba-trigger{width:100%;text-align:left;color:inherit;font:inherit;padding:0;border:0;cursor:pointer;appearance:none;background:transparent;display:flex;flex-direction:column;flex:1;min-height:100%}
-.tba-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
-.tba-trigger .film-action{width:100%}
-.tba-note{margin:-38px 0 64px;border-left:2px solid var(--accent);background:var(--panel);padding:20px 22px;color:var(--muted)}
-.tba-note[hidden]{display:none}
-.tba-note strong{display:block;color:var(--accent);font:11px var(--mono);letter-spacing:.1em;margin-bottom:6px}
+.film-section .section-head>p{max-width:440px}
+.universe-future-note{margin:-30px 0 58px;padding:17px 19px;border-left:2px solid var(--accent);background:linear-gradient(90deg,rgba(185,252,59,.055),transparent 86%);color:var(--muted);font-size:13px;line-height:1.75}
+.universe-future-note strong{color:var(--accent);font-weight:500}
+.film-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0 64px;align-items:stretch}
+.film-card{--film-accent:var(--accent);--film-shadow:rgba(185,252,59,.10);position:relative;min-width:0;min-height:100%;display:flex;flex-direction:column;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:#10131b;overflow:hidden;opacity:0;transform:translateY(0);animation:universe-card-in .48s ease-out forwards;transition:border-color .22s ease,transform .25s cubic-bezier(.2,.75,.2,1),box-shadow .25s ease,background-color .25s ease;will-change:transform}
+.film-card:focus-visible{outline:2px solid var(--film-accent);outline-offset:4px}
+.film-card:hover,.film-card:focus-visible{border-color:var(--film-accent);transform:translateY(-8px);box-shadow:0 18px 36px rgba(0,0,0,.34),0 0 0 1px color-mix(in srgb,var(--film-accent) 16%,transparent);background:#12151e}
+.film-card:active{transform:translateY(-2px) scale(.995)}
+.film-card:nth-child(1){animation-delay:.08s}.film-card:nth-child(2){animation-delay:.17s}.film-card:nth-child(3){animation-delay:.26s}
+.film-art{height:244px;min-height:220px;flex-shrink:0;position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:20px;overflow:hidden;border-bottom:1px solid var(--line)}
+.film-art:before,.film-art:after{content:"";position:absolute;pointer-events:none}
+.film-art:before{z-index:0;inset:14px;border:1px solid rgba(255,255,255,.2);transform:skewY(-8deg)}
+.film-art:after{z-index:0;width:160%;height:1px;left:-28%;top:48%;transform:rotate(-24deg)}
+.film-number,.film-art h2,.film-art .art-mark{position:relative;z-index:2}
+.film-art .staff,.film-art .sax-loop,.film-art .case-grid,.film-art .surgeon-ring,.film-art .unknown-shape{z-index:1}
+.film-number{font:9px var(--mono);letter-spacing:.14em;color:rgba(255,255,255,.7)}
+.film-art h2{font:900 clamp(30px,3.4vw,47px)/.88 var(--display);letter-spacing:-.025em;text-transform:uppercase;margin:0;max-width:100%;overflow-wrap:anywhere}
+.art-mark{position:absolute;right:20px;top:54px;font:900 11px var(--mono);letter-spacing:.12em;opacity:.78;writing-mode:vertical-rl}
+/* The Saxophone Thief: purple night, gold spotlight, musical staff and abstract saxophone-like curve — no image asset. */
+.film-card.thief{--film-accent:#d9b675;--film-shadow:rgba(217,182,117,.14)}
+.film-art.thief{background:radial-gradient(ellipse at 72% 26%,rgba(199,153,85,.25),transparent 35%),radial-gradient(ellipse at 25% 86%,rgba(115,73,157,.3),transparent 42%),linear-gradient(145deg,#251c32,#0b0a12 78%)}
+.film-art.thief:before{border-color:rgba(217,182,117,.37);inset:17px 14px 23px 20px;transform:skewY(-7deg)}
+.film-art.thief:after{background:linear-gradient(90deg,transparent,#d9b675 28%,#f7e5ac 52%,transparent 84%);box-shadow:0 0 22px rgba(217,182,117,.48)}
+.film-art.thief .staff{position:absolute;left:0;right:0;top:46%;height:62px;opacity:.16;background:repeating-linear-gradient(to bottom,rgba(246,218,161,.9) 0 1px,transparent 1px 12px);transform:rotate(-13deg)}
+.film-art.thief .sax-loop{position:absolute;right:17%;top:27%;width:35px;height:92px;border:3px solid rgba(231,193,119,.72);border-left-color:transparent;border-radius:22px 22px 8px 8px;transform:rotate(18deg);box-shadow:5px 23px 0 -1px rgba(231,193,119,.18)}
+.film-art.thief .sax-loop:before{content:"";position:absolute;width:15px;height:30px;top:67px;left:-4px;border:2px solid rgba(231,193,119,.76);border-radius:0 0 12px 12px;transform:rotate(-15deg)}
+/* SAIMON: charcoal, oxblood, surgical steel and a sharp red investigation line. */
+.film-card.saimon{--film-accent:#d96a73;--film-shadow:rgba(190,48,66,.14)}
+.film-art.saimon{background:radial-gradient(ellipse at 78% 27%,rgba(165,35,57,.3),transparent 34%),radial-gradient(ellipse at 20% 82%,rgba(141,154,165,.1),transparent 38%),linear-gradient(145deg,#231117,#090a0f 80%)}
+.film-art.saimon:before{border-color:rgba(219,180,181,.27);transform:skewY(5deg)}
+.film-art.saimon:after{background:linear-gradient(90deg,transparent,#b83c4b,#e8c9c9,transparent);box-shadow:0 0 24px rgba(195,55,75,.6);transform:rotate(-15deg)}
+.film-art.saimon .case-grid{position:absolute;inset:0;opacity:.12;background:linear-gradient(90deg,transparent 49.7%,rgba(234,220,220,.6) 50%,transparent 50.3%),linear-gradient(0deg,transparent 49.7%,rgba(234,220,220,.4) 50%,transparent 50.3%);background-size:37px 37px;mask-image:linear-gradient(135deg,black,transparent 80%)}
+.film-art.saimon .surgeon-ring{position:absolute;right:15%;top:24%;width:82px;height:82px;border:1px solid rgba(220,199,199,.36);border-radius:50%;box-shadow:0 0 0 12px rgba(220,199,199,.035),0 0 0 25px rgba(190,48,66,.06)}
+.film-art.saimon .surgeon-ring:before,.film-art.saimon .surgeon-ring:after{content:"";position:absolute;left:50%;top:-12px;width:1px;height:105px;background:rgba(220,199,199,.3);transform:rotate(35deg)}
+.film-art.saimon .surgeon-ring:after{transform:rotate(-35deg)}
+/* TBA: deliberately obscured future entry, composed only from CSS shapes. */
+.film-card.tba{--film-accent:#b9fc3b;--film-shadow:rgba(185,252,59,.08)}
+.film-art.tba{background:radial-gradient(circle at 50% 50%,rgba(98,88,255,.13),transparent 43%),linear-gradient(145deg,#11131c,#080a10)}
+.film-art.tba:before{border-color:rgba(185,252,59,.17);inset:21px;transform:rotate(2deg)}
+.film-art.tba:after{height:2px;background:linear-gradient(90deg,transparent,rgba(185,252,59,.45),transparent);transform:rotate(-27deg)}
+.film-art.tba .unknown-shape{position:absolute;width:115px;height:115px;right:calc(50% - 57px);top:calc(50% - 57px);border:1px solid rgba(185,252,59,.3);transform:rotate(45deg);box-shadow:0 0 0 15px rgba(185,252,59,.025),0 0 0 31px rgba(98,88,255,.04)}
+.film-art.tba .unknown-shape:before,.film-art.tba .unknown-shape:after{content:"";position:absolute;background:#b9fc3b;opacity:.32}
+.film-art.tba .unknown-shape:before{height:1px;left:-40%;right:-40%;top:50%}.film-art.tba .unknown-shape:after{width:1px;top:-40%;bottom:-40%;left:50%}
+.film-copy{display:flex;flex-direction:column;flex:1;min-height:220px;padding:21px}
+.film-meta{font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--film-accent);margin-bottom:12px}
+.film-copy h3{font:700 clamp(25px,2.6vw,31px)/1 var(--display);margin:0 0 12px;letter-spacing:-.015em}
+.film-copy p{font-size:13px;line-height:1.75;color:var(--muted);margin:0 0 24px}
+.film-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:15px;border-top:1px solid var(--line);font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--film-accent)}
+.film-card:hover .film-action,.film-card:focus-visible .film-action{color:var(--ink)}
 .universe-footer-note{border-top:1px solid var(--line);padding:22px 0 56px;color:var(--soft);font:9px var(--mono);letter-spacing:.09em;text-transform:uppercase}
+@keyframes universe-portal-bloom{0%{opacity:.12;transform:scale(.35)}65%{opacity:1;transform:scale(1.02)}100%{opacity:.7;transform:scale(1)}}
+@keyframes universe-signal-sweep{0%{opacity:0;transform:translateX(-30%) rotate(-18deg)}28%{opacity:1}100%{opacity:.12;transform:translateX(35%) rotate(-18deg)}}
+@keyframes universe-core-in{0%{opacity:0;transform:scale(.86) translateY(14px);filter:blur(5px)}65%{opacity:1;filter:blur(0)}100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}
+@keyframes universe-code-flicker{0%,16%,30%,100%{opacity:1}8%,23%{opacity:.2}}
+@keyframes universe-portal-turn{0%{opacity:0;transform:rotate(-32deg) scale(.7)}100%{opacity:1;transform:rotate(0) scale(1)}}
 @keyframes universe-title-in{to{opacity:1;transform:translateY(0)}}
 @keyframes universe-fade{to{opacity:1}}
-@keyframes universe-card-in{to{opacity:1;transform:translateY(0)}}
-@keyframes universe-atmosphere{from{opacity:.25;transform:scale(1.03)}to{opacity:1;transform:scale(1)}}
-@media(max-width:900px){.film-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.film-card:last-child{grid-column:1/-1}.film-card:last-child .film-art{height:180px}}
-@media(max-width:620px){.universe-intro{min-height:295px;padding:48px 0 44px}.universe-title{font-size:clamp(58px,17vw,86px)}.universe-intro p{font-size:14px}.film-grid{grid-template-columns:1fr;margin-bottom:48px}.film-card:last-child{grid-column:auto}.film-art{height:190px}.film-card:last-child .film-art{height:165px}.film-art h2{font-size:44px}.film-copy{padding:18px}.tba-note{margin-bottom:48px}}
-@media(prefers-reduced-motion:reduce){.universe-intro:before,.universe-kicker,.universe-title,.universe-intro p,.film-card,.universe-intro:after{animation:none;opacity:1;transform:none}}
+@keyframes universe-card-in{from{opacity:0}to{opacity:1}}
+@keyframes universe-atmosphere{from{opacity:.2;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}
+@keyframes universe-content-arrive{from{opacity:0}to{opacity:1}}
+@media(max-width:900px){.film-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.film-card:last-child{grid-column:1/-1}.film-art{height:225px}}
+@media(max-width:620px){.universe-transition{padding:18px}.universe-transition-subtitle{font-size:8px;letter-spacing:.1em}.universe-motifs{max-width:315px;gap:8px 11px;font-size:9px;letter-spacing:.12em;margin:17px auto 12px}.universe-portal{width:132px;min-width:132px;margin-bottom:19px}.universe-intro{min-height:300px;padding:48px 0 54px}.universe-title{font-size:clamp(52px,14.5vw,82px);line-height:.88}.universe-intro p{font-size:14px;max-width:36rem}.film-section{padding-top:42px}.film-grid{grid-template-columns:1fr;gap:14px;margin:20px 0 48px}.film-card:last-child{grid-column:auto}.film-art{height:206px;min-height:206px;padding:17px}.film-art h2{font-size:clamp(37px,10vw,50px);max-width:87%}.film-copy{min-height:0;padding:19px}.film-copy p{margin-bottom:22px}.film-action{min-height:25px}.universe-footer-note{padding-bottom:40px}}
+@media(hover:none){.film-card:hover{transform:none;box-shadow:none}.film-card:active{transform:translateY(-2px) scale(.995);border-color:var(--film-accent);box-shadow:0 9px 23px rgba(0,0,0,.28)}}
+@media(prefers-reduced-motion:reduce){
+  /* Keep the requested brief portal sequence on touch devices; reduce only movement and blur. */
+  .universe-transition:before{animation-duration:1.2s!important}.universe-transition:after{animation-duration:1.1s!important}.universe-transition-core{animation-duration:1.1s!important}.universe-portal,.universe-portal:before,.universe-portal:after{animation-duration:1.1s!important}.universe-motifs span{animation-duration:1s!important}.universe-title,.universe-kicker,.universe-intro p,.film-card{animation-duration:.32s!important}.film-card:hover,.film-card:focus-visible{transform:translateY(-4px)}
+}
 </style>
 </head>
 <body class="theme-home" id="top">
+<script>(function(){let play=false;try{play=sessionStorage.getItem("nb-play-universe-intro")==="1";sessionStorage.removeItem("nb-play-universe-intro")}catch(e){}document.body.classList.add(play?"universe-booting":"universe-skip-intro")})();</script>
+<div class="universe-transition" role="status" aria-live="polite" aria-label="Opening connected universe"><div class="universe-transition-core"><span class="universe-transition-code">NB / SHARED CRIME UNIVERSE / EXPANDING</span><div class="universe-portal" aria-hidden="true"><span>U/01+</span></div><p class="universe-transition-title">A world of consequences</p><div class="universe-motifs" aria-label="Crime, drugs, theft, revenge, weapons, massacre"><span>CRIME</span><span>DRUGS</span><span>THEFT</span><span>REVENGE</span><span>WEAPONS</span><span>MASSACRE</span></div><p class="universe-transition-subtitle">MULTIPLE FILMS · ONE WIDER CRIMINAL NETWORK</p></div></div>
 <div class="topline"><span>ORIGINAL WORLDS / STORY SYSTEMS / CHARACTER</span><span>PORTFOLIO 2026 · NAGPUR, INDIA</span></div>
 <header class="nav wrap"><a class="brand" href="index.html">NIKHIL BONDRE<em> / STORY + PLAY</em></a><button class="menu-toggle" aria-expanded="false" aria-label="Open menu">MENU ☰</button><nav class="navlinks"><a href="index.html#work">WORK</a><a href="index.html#approach">APPROACH</a><a href="index.html#about">ABOUT</a><a class="contact-link" href="index.html#contact">CONTACT ↗</a></nav></header>
 <main>
-<section class="universe-intro wrap"><div class="eyebrow universe-kicker">A CONNECTED UNIVERSE / ANIMATED FEATURE FILMS</div><h1 class="universe-title">Different stories.<br><span>One universe.</span></h1><p>Two animated crime feature films, connected by the traces people leave behind and the secrets that outlive them.</p></section>
-<section class="film-section wrap"><div class="section-head"><div><div class="eyebrow">01 / THE FILMS</div><h2>Enter the<br>universe.</h2></div><p>Each film stands on its own while revealing another part of a wider criminal world. More of the universe will be revealed in time.</p></div>
+<section class="universe-intro wrap"><div class="eyebrow universe-kicker">A GROWING UNIVERSE / ANIMATED FEATURE FILMS</div><h1 class="universe-title">Different stories.<br><span>One universe.</span></h1><p>A connected crime saga planned across 4–5 animated feature films. Theft, drugs, weapons, revenge, and massacre ripple through a wider criminal network, with each story revealing another part of the world.</p></section>
+<section class="film-section wrap"><div class="section-head"><div><div class="eyebrow">01 / OPEN FILES</div><h2>Choose a<br>story.</h2></div><p>These are the first two outlined films in a planned 4–5-film saga. Each can stand on its own while revealing more about the criminal world connecting them.</p></div>
 <div class="film-grid">
-<article class="film-card"><div class="film-art thief"><span class="film-number">FEATURE FILM / 01</span><h2>The Saxophone Thief</h2></div><div class="film-copy"><div class="film-meta">1990s AMERICA · CRIME THRILLER</div><h3>The Saxophone Thief</h3><p>A celebrated saxophone player hides a violent double life as a masked thief. As two detectives pursue the truth, a betrayal inside their partnership threatens to change everything.</p><a class="film-action" href="https://drive.google.com/drive/folders/1Izl-CPihmDcHR8S_xsXI-keAapyNBxVB?usp=drive_link" target="_blank" rel="noopener noreferrer"><span>OPEN FILM OUTLINE</span><span>↗</span></a></div></article>
-<article class="film-card"><div class="film-art saimon"><span class="film-number">FEATURE FILM / 02</span><h2>SAIMON</h2></div><div class="film-copy"><div class="film-meta">CRIME · REVENGE · CONSPIRACY</div><h3>SAIMON</h3><p>A journalist investigates the destruction of a criminal family, uncovering a story that reaches far beyond the people believed to be at the top.</p><a class="film-action" href="https://drive.google.com/drive/folders/1f-iVO3YMCcOyGl1gCghWWLnx4gB9Ek21?usp=drive_link" target="_blank" rel="noopener noreferrer"><span>OPEN OUTLINE & CHARACTER FILES</span><span>↗</span></a></div></article>
-<article class="film-card"><button class="tba-trigger" type="button" aria-expanded="false" aria-controls="tba-note"><div class="film-art tba"><span class="film-number">FEATURE FILM / 03</span><h2>TBA</h2></div><div class="film-copy"><div class="film-meta">TITLE TO BE ANNOUNCED</div><h3>TBA</h3><p>This part of the universe is not ready to be revealed.</p><span class="film-action"><span>REVEAL STATUS</span><span>＋</span></span></div></button></article>
+<a class="film-card thief" href="saxophone-thief-film.html" aria-label="Open The Saxophone Thief animated feature film details"><div class="film-art thief"><span class="film-number">FEATURE FILM / 01</span><span class="art-mark">PURPLE NIGHT · GOLD LIGHT</span><div class="staff" aria-hidden="true"></div><div class="sax-loop" aria-hidden="true"></div><h2>The Saxophone<br>Thief</h2></div><div class="film-copy"><div class="film-meta">1990s AMERICA · CRIME THRILLER</div><h3>The Saxophone Thief</h3><p>In 1990s America, celebrated saxophonist Rafe secretly lives as a masked thief. Two detective partners investigate the thefts and killings, until one betrays the other to protect him. A car-auction theft ends in a garage ambush.</p><span class="film-action"><span>OPEN FILM FILE</span><span aria-hidden="true">↗</span></span></div></a>
+<a class="film-card saimon" href="saimon.html" aria-label="Open SAIMON animated feature film details"><div class="film-art saimon"><span class="film-number">FEATURE FILM / 02</span><span class="art-mark">CASE FILE / SURGEON</span><div class="case-grid" aria-hidden="true"></div><div class="surgeon-ring" aria-hidden="true"></div><h2>SAIMON</h2></div><div class="film-copy"><div class="film-meta">CRIME · PSYCHOLOGICAL THRILLER · MYSTERY</div><h3>SAIMON</h3><p>Government-commissioned journalist Naren interviews Balan, the Karriappa family’s former cook, about their rise and massacre. The interview quietly helps the surviving heir trace police links to the Professor, while the stolen car leads toward the family’s hidden assets.</p><span class="film-action"><span>OPEN FILM FILE</span><span aria-hidden="true">↗</span></span></div></a>
+<a class="film-card tba" href="universe-tba.html" aria-label="Open the upcoming universe entry status page"><div class="film-art tba"><span class="film-number">FUTURE FILMS / 03+</span><span class="art-mark">ACCESS RESTRICTED</span><div class="unknown-shape" aria-hidden="true"></div><h2>TBA</h2></div><div class="film-copy"><div class="film-meta">TITLE TO BE ANNOUNCED</div><h3>More stories ahead</h3><p>Additional feature films are planned within this shared criminal universe. Their titles and story details will be revealed as they are ready.</p><span class="film-action"><span>OPEN STATUS FILE</span><span aria-hidden="true">↗</span></span></div></a>
 </div>
-<div class="tba-note" id="tba-note" hidden role="status"><strong>TBA — TO BE ANNOUNCED</strong>This film's title and details will be revealed later.</div>
-<div class="universe-footer-note"><span>INDEPENDENT STORY UNIVERSE · CREATED BY NIKHIL BONDRE</span></div>
+<div class="universe-future-note"><strong>THIS UNIVERSE EXTENDS BEYOND THESE FILES.</strong> The Saxophone Thief and SAIMON are the first two outlined entries in a planned 4–5-film saga. Additional stories will expand the criminal network, its rival organisations, and the consequences that connect them.</div><div class="universe-footer-note"><span>INDEPENDENT STORY UNIVERSE · CREATED BY NIKHIL BONDRE</span></div>
 </section>
 </main>
 <footer class="wrap"><a class="brand" href="index.html">NIKHIL BONDRE</a><span>ORIGINAL STORIES · WORLDS · PLAYER EXPERIENCE</span><a href="#top">BACK TO TOP ↑</a></footer>
 <script src="script.js"></script>
 <script>
-const tbaTrigger = document.querySelector('.tba-trigger');
-const tbaNote = document.querySelector('#tba-note');
-tbaTrigger?.addEventListener('click', () => {
-  const expanded = tbaTrigger.getAttribute('aria-expanded') === 'true';
-  tbaTrigger.setAttribute('aria-expanded', String(!expanded));
-  tbaNote.hidden = expanded;
-  const action = tbaTrigger.querySelector('.film-action span:first-child');
-  const icon = tbaTrigger.querySelector('.film-action span:last-child');
-  if (action) action.textContent = expanded ? 'REVEAL STATUS' : 'HIDE STATUS';
-  if (icon) icon.textContent = expanded ? '＋' : '−';
-});
+(() => {
+  const body = document.body;
+  const overlay = document.querySelector('.universe-transition');
+  if (!body.classList.contains('universe-booting')) return;
+  // The portal intro plays only after the homepage Universe card is clicked.
+  // Returning from a film page will not replay it unless the visitor re-enters from home.
+  const finish = () => {
+    if (!body.classList.contains('universe-booting')) return;
+    body.classList.remove('universe-booting');
+    body.classList.add('universe-ready');
+    overlay?.classList.add('is-leaving');
+    window.setTimeout(() => overlay?.remove(), 420);
+  };
+  window.setTimeout(finish, 2320);
+  window.setTimeout(finish, 4200);
+})();
 </script>
+<noscript><style>body.universe-booting .topline,body.universe-booting .nav,body.universe-booting main,body.universe-booting footer{opacity:1!important;visibility:visible!important}.universe-transition{display:none!important}</style></noscript>
 </body>
 </html>
